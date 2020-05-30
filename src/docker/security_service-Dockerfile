@@ -1,0 +1,17 @@
+FROM microsoft/aspnetcore:1.1.2 AS base
+WORKDIR /app
+EXPOSE 9999
+
+FROM microsoft/aspnetcore-build:1.1.2 AS build
+WORKDIR /src
+EXPOSE 9999
+COPY . .
+
+WORKDIR /src/Services/NT.IdentityServer
+RUN dotnet restore
+RUN dotnet publish -c Release -o /app
+
+FROM base AS final
+WORKDIR /app
+COPY --from=build /app .
+ENTRYPOINT ["dotnet", "NT.IdentityServer.dll"]

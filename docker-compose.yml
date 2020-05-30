@@ -1,0 +1,113 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    networks:
+      - shopping-cart
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+  gateway:
+    build:
+      context: src
+      dockerfile: docker/api_gateway-Dockerfile
+    image: shoppingcart-gateway
+    depends_on:
+      - rabbitmq
+    networks:
+      - shopping-cart
+    ports:
+      - "8888:8888"
+  audit:
+    build:
+      context: src
+      dockerfile: docker/audit_service-Dockerfile
+    image: shoppingcart-audit
+    networks:
+      - shopping-cart
+    ports:
+      - "8806:8806"
+  catalog:
+    build:
+      context: src
+      dockerfile: docker/catalog_service-Dockerfile
+    image: shoppingcart-catalog
+    networks:
+      - shopping-cart
+    ports:
+      - "8803:8803"
+  checkout:
+    build:
+      context: src
+      dockerfile: docker/checkout_service-Dockerfile
+    image: shoppingcart-checkout
+    networks:
+      - shopping-cart
+    ports:
+      - "8804:8804"
+  customer:
+    build:
+      context: src
+      dockerfile: docker/customer_service-Dockerfile
+    image: shoppingcart-customer
+    networks:
+      - shopping-cart
+    ports:
+      - "8801:8801"
+  payment:
+    build:
+      context: src
+      dockerfile: docker/payment_service-Dockerfile
+    image: shoppingcart-payment
+    depends_on:
+      - rabbitmq
+    networks:
+      - shopping-cart
+    # Uncomment to change payment gateway
+    #environment:
+      #PAYMENT_GATEWAY: "https://www.worldpay.com"
+    ports:
+      - "8805:8805"
+  order:
+    build:
+      context: src
+      dockerfile: docker/order_service-Dockerfile
+    image: shoppingcart-order
+    depends_on:
+      - rabbitmq
+    networks:
+      - shopping-cart
+    ports:
+      - "8802:8802"
+  security:
+    build:
+      context: src
+      dockerfile: docker/security_service-Dockerfile
+    image: shoppingcart-security
+    depends_on:
+      - gateway
+    networks:
+      - shopping-cart
+    ports:
+      - "9999:9999"
+  web:
+    build:
+      context: src
+      dockerfile: docker/web-Dockerfile
+    image: shoppingcart-web
+    depends_on:
+      - gateway
+      - audit
+      - catalog
+      - customer
+      - order
+      - payment
+      - security
+    ports:
+      - "3000:80"
+    networks:
+      - shopping-cart
+
+networks:
+  shopping-cart:
+
