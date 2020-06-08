@@ -9,8 +9,8 @@ RUN dotnet restore
 WORKDIR /src/NT.Migrator
 RUN dotnet restore
 
-WORKDIR /src/NT.IdentityServer.Migrator
+WORKDIR /src/Services/NT.IdentityServer.Migrator
 RUN dotnet restore
 
-WORKDIR /src/NT.IdentityServer.Api
+WORKDIR /src/Services/NT.IdentityServer
 ENTRYPOINT ["dotnet", "run"]

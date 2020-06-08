@@ -9,8 +9,8 @@ RUN dotnet restore
 WORKDIR /src/NT.Migrator
 RUN dotnet restore
 
-WORKDIR /src/NT.PaymentService.Migrator
+WORKDIR /src/Services/NT.PaymentService.Migrator
 RUN dotnet restore
 
-WORKDIR /src/NT.PaymentService.Api
+WORKDIR /src/Services/NT.PaymentService.Api
 ENTRYPOINT ["dotnet", "run"]

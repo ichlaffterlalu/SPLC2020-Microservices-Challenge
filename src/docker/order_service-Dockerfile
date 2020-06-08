@@ -9,8 +9,8 @@ RUN dotnet restore
 WORKDIR /src/NT.Migrator
 RUN dotnet restore
 
-WORKDIR /src/NT.OrderService.Migrator
+WORKDIR /src/Services/NT.OrderService.Migrator
 RUN dotnet restore
 
-WORKDIR /src/NT.OrderService.Api
+WORKDIR /src/Services/NT.OrderService.Api
 ENTRYPOINT ["dotnet", "run"]

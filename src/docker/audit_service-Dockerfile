@@ -5,4 +5,12 @@ COPY . .
 
 WORKDIR /src/Services/NT.AuditService.Api
 RUN dotnet restore
+
+WORKDIR /src/NT.Migrator
+RUN dotnet restore
+
+WORKDIR /src/Services/NT.AuditService.Migrator
+RUN dotnet restore
+
+WORKDIR /src/Services/NT.AuditService.Api
 ENTRYPOINT ["dotnet", "run"]
