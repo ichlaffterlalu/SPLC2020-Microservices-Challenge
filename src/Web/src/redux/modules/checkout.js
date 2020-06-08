@@ -2,7 +2,7 @@ const LOAD_DEFAULT_DATA = "sc/checkout/LOAD_DEFAULT_DATA";
 const DO_CHECKOUT_SUCCEED = "sc/checkout/DO_CHECKOUT_SUCCEED";
 const DO_CHECKOUT_FAILED = "sc/checkout/DO_CHECKOUT_FAILED";
 
-const PROCESS_CHECKOUT_URL = `http://localhost:8888/api/checkout`;
+const PROCESS_CHECKOUT_URL = `http://` + location.hostname + `:8888/api/checkout`;
 
 const initialState = {
   loaded: false,

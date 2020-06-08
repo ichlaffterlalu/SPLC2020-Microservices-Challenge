@@ -5,7 +5,7 @@ const ADD_HOME_PRODUCT_TO_CART = "sc/home/ADD_HOME_PRODUCT_TO_CART";
 const MAKE_CART_EMPTY = "sc/home/MAKE_CART_EMPTY";
 const REMOVE_PRODUCT_FROM_CART = "sc/home/REMOVE_PRODUCT_FROM_CART";
 
-const LOAD_HOME_PRODUCTS_URL = `http://localhost:8888/api/products`;
+const LOAD_HOME_PRODUCTS_URL = `http://` + location.hostname + `:8888/api/products`;
 
 const initialState = {
   loaded: false,

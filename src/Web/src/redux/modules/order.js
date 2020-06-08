@@ -2,7 +2,7 @@ const LOAD_ORDERS = "sc/order/LOAD_ORDERS";
 const LOAD_ORDERS_SUCCESSED = "sc/order/LOAD_ORDERS_SUCCESSED";
 const LOAD_ORDERS_FAILED = "sc/order/LOAD_ORDERS_FAILED";
 
-const LOAD_ORDERS_URL = `http://localhost:8888/api/orders`;
+const LOAD_ORDERS_URL = `http://` + location.hostname + `:8888/api/orders`;
 
 const initialState = {
   loading: true,

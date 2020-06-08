@@ -2,8 +2,8 @@ const LOAD_PAYMENTS = "sc/payment/LOAD_PAYMENTS";
 const LOAD_PAYMENTS_SUCCESSED = "sc/payment/LOAD_PAYMENTS_SUCCESSED";
 const LOAD_PAYMENTS_FAILED = "sc/payment/LOAD_PAYMENTS_FAILED";
 
-const LOAD_PAYMENTS_URL = `http://localhost:8888/api/payments`;
-const CALLBACK_FROM_PAYMENT_GATEWAY_URL = `http://localhost:8888/api/payments`;
+const LOAD_PAYMENTS_URL = `http://` + location.hostname + `:8888/api/payments`;
+const CALLBACK_FROM_PAYMENT_GATEWAY_URL = `http://` + location.hostname + `:8888/api/payments`;
 
 const initialState = {
   loading: true,

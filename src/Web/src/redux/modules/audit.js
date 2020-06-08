@@ -2,7 +2,7 @@ const LOAD_AUDITS = "sc/audit/LOAD_AUDITS";
 const LOAD_AUDITS_SUCCESSED = "sc/audit/LOAD_AUDITS_SUCCESSED";
 const LOAD_AUDITS_FAILED = "sc/audit/LOAD_AUDITS_FAILED";
 
-const LOAD_AUDITS_URL = `http://localhost:8888/api/audits`;
+const LOAD_AUDITS_URL = `http://` + location.hostname + `:8888/api/audits`;
 
 const initialState = {
   loading: true,
