@@ -5,7 +5,9 @@ COPY . .
 
 WORKDIR /src/NT.WebApi
 RUN dotnet restore
-RUN dotnet publish -c Release -o /app
 
-WORKDIR /app
-ENTRYPOINT ["dotnet", "NT.WebApi.dll"]
+WORKDIR /src/NT.Migrator
+RUN dotnet restore
+
+WORKDIR /src/NT.WebApi
+ENTRYPOINT ["dotnet", "run"]
