@@ -1,4 +1,8 @@
-FROM microsoft/aspnetcore-build:1.1.2
+FROM microsoft/aspnetcore-build:1.1.2 AS base
+WORKDIR /app
+EXPOSE 8888
+
+FROM microsoft/aspnetcore-build:1.1.2 AS build
 WORKDIR /src
 EXPOSE 8888
 COPY . .
@@ -7,5 +11,7 @@ WORKDIR /src/NT.WebApi
 RUN dotnet restore
 RUN dotnet publish -c Release -o /app
 
+FROM base AS final
 WORKDIR /app
+COPY --from=build /app .
 ENTRYPOINT ["dotnet", "NT.WebApi.dll"]

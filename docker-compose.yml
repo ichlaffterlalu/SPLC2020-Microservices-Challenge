@@ -1,12 +1,18 @@
 version: '3'
 services:
   rabbitmq:
-    image: rabbitmq:3-management-alpine
-    networks:
-      - shopping-cart
+    image: shoppingcart-rabbitmq
+    build:
+      context: src/docker
+      dockerfile: rabbitmq-Dockerfile
+    volumes:
+      - rabbitmq_etc:/etc/rabbitmq
+      - rabbitmq_data:/var/lib/rabbitmq
+      - rabbitmq_logs:/var/log/rabbitmq
     ports:
       - "15672:15672"
       - "5672:5672"
+    network_mode: "host"
   gateway:
     build:
       context: src
@@ -14,46 +20,55 @@ services:
     image: shoppingcart-gateway
     depends_on:
       - rabbitmq
-    networks:
-      - shopping-cart
     ports:
       - "8888:8888"
+    depends_on:
+      - sqlexpress
+      - rabbitmq
+    network_mode: "host"
   audit:
     build:
       context: src
       dockerfile: docker/audit_service-Dockerfile
     image: shoppingcart-audit
-    networks:
-      - shopping-cart
     ports:
       - "8806:8806"
+    depends_on:
+      - sqlexpress
+    network_mode: "host"
   catalog:
     build:
       context: src
       dockerfile: docker/catalog_service-Dockerfile
     image: shoppingcart-catalog
-    networks:
-      - shopping-cart
     ports:
       - "8803:8803"
+    depends_on:
+      - sqlexpress
+      - rabbitmq
+    network_mode: "host"
   checkout:
     build:
       context: src
       dockerfile: docker/checkout_service-Dockerfile
     image: shoppingcart-checkout
-    networks:
-      - shopping-cart
     ports:
       - "8804:8804"
+    depends_on:
+      - sqlexpress
+      - rabbitmq
+    network_mode: "host"
   customer:
     build:
       context: src
       dockerfile: docker/customer_service-Dockerfile
     image: shoppingcart-customer
-    networks:
-      - shopping-cart
     ports:
       - "8801:8801"
+    depends_on:
+      - sqlexpress
+      - rabbitmq
+    network_mode: "host"
   payment:
     build:
       context: src
@@ -61,13 +76,12 @@ services:
     image: shoppingcart-payment
     depends_on:
       - rabbitmq
-    networks:
-      - shopping-cart
-    # Uncomment to change payment gateway
-    #environment:
-      #PAYMENT_GATEWAY: "https://www.worldpay.com"
     ports:
       - "8805:8805"
+    depends_on:
+      - sqlexpress
+      - rabbitmq
+    network_mode: "host"
   order:
     build:
       context: src
@@ -75,10 +89,12 @@ services:
     image: shoppingcart-order
     depends_on:
       - rabbitmq
-    networks:
-      - shopping-cart
     ports:
       - "8802:8802"
+    depends_on:
+      - sqlexpress
+      - rabbitmq
+    network_mode: "host"
   security:
     build:
       context: src
@@ -86,10 +102,12 @@ services:
     image: shoppingcart-security
     depends_on:
       - gateway
-    networks:
-      - shopping-cart
     ports:
       - "9999:9999"
+    depends_on:
+      - sqlexpress
+      - rabbitmq
+    network_mode: "host"
   web:
     build:
       context: src
@@ -105,9 +123,19 @@ services:
       - security
     ports:
       - "3000:80"
-    networks:
-      - shopping-cart
+    network_mode: "host"
+  sqlexpress:
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+      SA_PASSWORD: "123456"
+      ACCEPT_EULA: "Y"
+    restart: always
+    ports:
+      - "1433:1433"
+    network_mode: "host"
 
-networks:
-  shopping-cart:
-
+volumes:
+  rabbitmq_etc:
+  rabbitmq_data:
+  rabbitmq_logs:
+  db_data:
